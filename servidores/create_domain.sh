@@ -1,9 +1,5 @@
 #!/bin/bash
 
-
-#MI_DOMINIO="python.jrgware.es"
-
-
 #Styles
 red=$( echo -e "\033[1;31;40m" )
 green=$( echo -e "\033[1;32;40m" )
@@ -168,7 +164,6 @@ server {
 EOF
 
 
-
 echo "Reiniciando Nginx"
 echo ""
 sudo service nginx restart
@@ -180,6 +175,7 @@ printf "\n\thttps://www.ssllabs.com/ssltest/analyze.html?d="$MI_DOMINIO
 echo $none
 
 
+echo ""
 echo "Recuerda introducir la tarea en CRON para renovar los certificados si no existe:"
 echo $red
 printf "(tip)\n\$ sudo crontab -e\n\n"
