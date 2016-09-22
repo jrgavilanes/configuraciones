@@ -1,4 +1,12 @@
 #!/bin/bash
+# ******************************************************************
+# ** Description : Configure a basic web nginx site with ssl (letsEncrypt)
+# ** File        : create_domain.sh
+# ** Version     : 1.0
+# ** Maintainer  : Juan R. Gavilanes
+# ** Date        : 2016-09-22
+# ******************************************************************
+
 
 #Styles
 red=$( echo -e "\033[1;31;40m" )
