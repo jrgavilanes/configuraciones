@@ -25,6 +25,7 @@ while [[ -z "$MI_DOMINIO" ]]; do
 done
 
 
+echo ""
 read -p $none"Ha introducido "$green$MI_DOMINIO$none", desea continuar?: [S/n]" sigo
 while [[ -z "$sigo" ]]; do
     sigo="S"
@@ -70,16 +71,21 @@ fi
 echo $green
 
     echo "Eliminando directorio "/var/www/$MI_DOMINIO/
+    echo ""
     sudo rm /var/www/$MI_DOMINIO/ -rf
 
-    sudo mkdir /var/www/$MI_DOMINIO
     echo "Creando directorio "/var/www/$MI_DOMINIO/
+    echo ""
+    sudo mkdir /var/www/$MI_DOMINIO
+
 
     echo "Generando HTML básico en "/var/www/$MI_DOMINIO/index.html
+    echo ""
+
     echo "Hola desde:" $MI_DOMINIO > /var/www/$MI_DOMINIO/index.html 
 
-
     echo "Generando Configuración Nginx básica"
+    echo ""
 
 echo $none
 
@@ -108,14 +114,17 @@ EOF
 ls /etc/nginx/sites-available/$MI_DOMINIO
 
 echo $green"Activando sitio Nginx"$none
+echo ""
 sudo ln -s /etc/nginx/sites-available/$MI_DOMINIO /etc/nginx/sites-enabled/$MI_DOMINIO 2>/dev/null
 sudo ls /etc/nginx/sites-enabled/$MI_DOMINIO
 sudo service nginx restart
 
 echo $green"Requiriendo Certificado LetsEncrypt"$none
+echo ""
 sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO
 
 echo $green"Generando Configuración Nginx SSL"$none
+echo ""
 cat << EOF > /etc/nginx/sites-available/$MI_DOMINIO
 server {
 
@@ -161,6 +170,7 @@ EOF
 
 
 echo "Reiniciando Nginx"
+echo ""
 sudo service nginx restart
 
 
