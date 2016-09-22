@@ -4,22 +4,30 @@
 MI_DOMINIO="python.jrgware.es"
 
 
+#Styles
+red=$( echo -e "\033[1;31;40m" )
+green=$( echo -e "\033[1;32;40m" )
+none=$( echo -e "\033[0m" )
+
+
 clear
 
 if [ "$EUID" -ne 0 ]
-  then echo "Please run as root ( with sudo )"
+  then echo $red"Please run as root ( with sudo )"$none
   exit
 fi
 
 if ! which nginx > /dev/null 2>&1; then
-    echo "Nginx not installed, please install it before running this script"
-    echo "$ sudo apt-get update && sudo apt-get install nginx"
+    echo $red
+        echo "Nginx not installed, please install it before running this script"
+        echo "$ sudo apt-get update && sudo apt-get install nginx"
+    echo $none
     exit
 fi
 
 
 if ! which certbot-auto > /dev/null 2>&1; then
-    echo "El cliente LetsEncrypt no está instalado. Vamos a ello ...."
+    echo $green"El cliente LetsEncrypt no está instalado. Vamos a ello ...."$none
 
  if ! which wget > /dev/null 2>&1; then
      sudo apt-get update -y 1>/dev/null && sudo apt-get install wget -y 1>/dev/null
@@ -32,22 +40,27 @@ fi
 
 
 if [ ! -f /etc/ssl/certs/dhparam.pem ]; then
-    echo "Grupo Diffie-Hellman no existe. Vamos a crear uno para incrementar la seguridad."
+    echo $green"Grupo Diffie-Hellman no existe. Vamos a crear uno para incrementar la seguridad."$none    
     openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 fi
 
 
-echo "Eliminando directorio "/var/www/$MI_DOMINIO/
-sudo rm /var/www/$MI_DOMINIO/ -rf
+echo $green
 
-sudo mkdir /var/www/$MI_DOMINIO
-echo "Creando directorio "/var/www/$MI_DOMINIO/
+    echo "Eliminando directorio "/var/www/$MI_DOMINIO/
+    sudo rm /var/www/$MI_DOMINIO/ -rf
 
-echo "Generando HTML básico en "/var/www/$MI_DOMINIO/index.html
-echo "Hola desde:" $MI_DOMINIO > /var/www/$MI_DOMINIO/index.html 
+    sudo mkdir /var/www/$MI_DOMINIO
+    echo "Creando directorio "/var/www/$MI_DOMINIO/
+
+    echo "Generando HTML básico en "/var/www/$MI_DOMINIO/index.html
+    echo "Hola desde:" $MI_DOMINIO > /var/www/$MI_DOMINIO/index.html 
 
 
-echo "Generando Configuración Nginx básica"
+    echo "Generando Configuración Nginx básica"
+
+echo $none
+
 cat << EOF > /etc/nginx/sites-available/$MI_DOMINIO
 server {
 
@@ -72,15 +85,15 @@ server {
 EOF
 ls /etc/nginx/sites-available/$MI_DOMINIO
 
-echo "Activando sitio Nginx"
+echo $green"Activando sitio Nginx"$none
 sudo ln -s /etc/nginx/sites-available/$MI_DOMINIO /etc/nginx/sites-enabled/$MI_DOMINIO 2>/dev/null
 sudo ls /etc/nginx/sites-enabled/$MI_DOMINIO
 sudo service nginx restart
 
-echo "Requiriendo Certificado LetsEncrypt"
+echo $green"Requiriendo Certificado LetsEncrypt"$none
 sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO
 
-echo "Generando Configuración Nginx SSL"
+echo $green"Generando Configuración Nginx SSL"$none
 cat << EOF > /etc/nginx/sites-available/$MI_DOMINIO
 server {
 
@@ -124,10 +137,22 @@ server {
 EOF
 
 
+
 echo "Reiniciando Nginx"
 sudo service nginx restart
 
-echo "Recuerda introducir la tarea en CRON para renovar los certificados si no existe:"
-printf "(tip)\n\$ sudo crontab -e\n\n\tañadir siguientes entradas: ( ejecutar todos los lunes a las 2:30 y 2:35 am )\n\n\t30 2 * * 1 /usr/local/sbin/certbot-auto renew >> /var/log/le-renew.log\n\t35 2 * * 1 /etc/init.d/nginx reload"
+echo $green
+printf "\nCompueba la calidad del certificado entrando en la siguiente dirección:\n"
+printf "\nhttps://www.ssllabs.com/ssltest/analyze.html?d="$MI_DOMINIO
+echo $none
 
-printf "\n\nFin del proceso"
+
+echo $red
+echo "Recuerda introducir la tarea en CRON para renovar los certificados si no existe:"
+printf "(tip)\n\$ sudo crontab -e\n\n"
+printf "\tañadir siguientes entradas: ( ejecutar todos los lunes a las 2:30 y 2:35 am )\n\n"
+printf "\t30 2 * * 1 /usr/local/sbin/certbot-auto renew >> /var/log/le-renew.log\n"
+printf "\t35 2 * * 1 /etc/init.d/nginx reload"
+echo $none
+
+printf $green"\n\nFin del proceso\n\n"$none
