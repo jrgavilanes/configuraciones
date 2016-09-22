@@ -27,7 +27,7 @@ if ! which certbot-auto > /dev/null 2>&1; then
 
     cd /usr/local/sbin
     wget https://dl.eff.org/certbot-auto
-    chmod a+x /usr/local/sbin/certbot-autos
+    chmod a+x /usr/local/sbin/certbot-auto
 fi
 
 
@@ -38,9 +38,9 @@ fi
 
 
 echo "Eliminando directorio "/var/www/$MI_DOMINIO/
-rm /var/www/$MI_DOMINIO/ -rf
+sudo rm /var/www/$MI_DOMINIO/ -rf
 
-mkdir /var/www/$MI_DOMINIO
+sudo mkdir /var/www/$MI_DOMINIO
 echo "Creando directorio "/var/www/$MI_DOMINIO/
 
 echo "Generando HTML básico en "/var/www/$MI_DOMINIO/index.html
@@ -73,12 +73,12 @@ EOF
 ls /etc/nginx/sites-available/$MI_DOMINIO
 
 echo "Activando sitio Nginx"
-ln -s /etc/nginx/sites-available/$MI_DOMINIO /etc/nginx/sites-enabled/$MI_DOMINIO 2>/dev/null
-ls /etc/nginx/sites-enabled/$MI_DOMINIO
-service nginx restart
+sudo ln -s /etc/nginx/sites-available/$MI_DOMINIO /etc/nginx/sites-enabled/$MI_DOMINIO 2>/dev/null
+sudo ls /etc/nginx/sites-enabled/$MI_DOMINIO
+sudo service nginx restart
 
 echo "Requiriendo Certificado LetsEncrypt"
-certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO
+sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO
 
 echo "Generando Configuración Nginx SSL"
 cat << EOF > /etc/nginx/sites-available/$MI_DOMINIO
@@ -125,7 +125,7 @@ EOF
 
 
 echo "Reiniciando Nginx"
-service nginx restart
+sudo service nginx restart
 
 echo "Recuerda introducir la tarea en CRON para renovar los certificados si no existe:"
 printf "(tip)\n\$ sudo crontab -e\n\n\tañadir siguientes entradas: ( ejecutar todos los lunes a las 2:30 y 2:35 am )\n\n\t30 2 * * 1 /usr/local/sbin/certbot-auto renew >> /var/log/le-renew.log\n\t35 2 * * 1 /etc/init.d/nginx reload"
