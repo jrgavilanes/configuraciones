@@ -1,10 +1,10 @@
 #!/bin/bash
 # ******************************************************************
 # ** Description : Script Initial Configuration for Ubuntu (16.04)
-# ** File		 : ubuntu_first_install.sh
-# ** Version	 : 1.0
-# ** Maintainer	 : Juan R. Gavilanes
-# ** Date		 : 2016-09-22
+# ** File        : ubuntu_first_install.sh
+# ** Version     : 1.0
+# ** Maintainer  : Juan R. Gavilanes
+# ** Date        : 2016-09-22
 # ******************************************************************
 
 
@@ -70,14 +70,14 @@ sudo dpkg-reconfigure tzdata
 if [ ! -f /swapfile ]; then
 
     echo $pinta_verde
-	echo "Creating SWAPFILE ..."
-	echo $quita_estilo
+    echo "Creating SWAPFILE ..."
+    echo $quita_estilo
 
-	sudo fallocate -l 2G /swapfile
-	sudo chmod 600 /swapfile
-	sudo mkswap /swapfile
-	sudo swapon /swapfile
-	sudo sh -c 'echo "/swapfile none swap sw 0 0" >> /etc/fstab'
+    sudo fallocate -l 2G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    sudo sh -c 'echo "/swapfile none swap sw 0 0" >> /etc/fstab'
 fi
 
 # Final Advices
