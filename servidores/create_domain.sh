@@ -141,14 +141,15 @@ EOF
 echo "Reiniciando Nginx"
 sudo service nginx restart
 
-echo $green
+
 printf "\nCompueba la calidad del certificado entrando en la siguiente dirección:\n"
-printf "\nhttps://www.ssllabs.com/ssltest/analyze.html?d="$MI_DOMINIO
+echo $green
+printf "\n\thttps://www.ssllabs.com/ssltest/analyze.html?d="$MI_DOMINIO
 echo $none
 
 
-echo $red
 echo "Recuerda introducir la tarea en CRON para renovar los certificados si no existe:"
+echo $red
 printf "(tip)\n\$ sudo crontab -e\n\n"
 printf "\tañadir siguientes entradas: ( ejecutar todos los lunes a las 2:30 y 2:35 am )\n\n"
 printf "\t30 2 * * 1 /usr/local/sbin/certbot-auto renew >> /var/log/le-renew.log\n"
