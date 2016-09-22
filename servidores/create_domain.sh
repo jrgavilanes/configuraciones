@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-MI_DOMINIO="python.jrgware.es"
+#MI_DOMINIO="python.jrgware.es"
 
 
 #Styles
@@ -16,6 +16,28 @@ if [ "$EUID" -ne 0 ]
   then echo $red"Please run as root ( with sudo )"$none
   exit
 fi
+
+
+# Ask for the new Domain name.
+read -p $green"Introduzca su dominio (ej: jrgware.es ):? "$none MI_DOMINIO
+while [[ -z "$MI_DOMINIO" ]]; do
+    read -p $red"Necesito un dominio! (ej: jrgware.es ):? "$none MI_DOMINIO
+done
+
+
+read -p $none"Ha introducido "$green$MI_DOMINIO$none", desea continuar?: [S/n]" sigo
+while [[ -z "$sigo" ]]; do
+    sigo="S"
+done
+
+if [[ ! $sigo =~ [Ss]{1} ]]; then
+
+    printf $red"\nHa seleccionado salir!\n"$none
+
+    exit
+
+fi
+
 
 if ! which nginx > /dev/null 2>&1; then
     echo $red
