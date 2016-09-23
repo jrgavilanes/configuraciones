@@ -130,6 +130,13 @@ sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI
 echo $green"Generando Configuración Nginx SSL"$none
 echo ""
 cat << EOF > /etc/nginx/sites-available/$MI_DOMINIO
+
+# upstream $MI_DOMINIO_docker {
+
+#     server localhost:3000;
+
+# }
+
 server {
 
     listen 443 ssl;     
@@ -144,8 +151,16 @@ server {
 
 
     location / {
+
         try_files \$uri \$uri/ =404;
+
     }
+
+    # location / {
+
+    #     proxy_pass http://$MI_DOMINIO_docker;
+
+    # }
 
     # letsEncrypt
     location ~ /.well-known {
