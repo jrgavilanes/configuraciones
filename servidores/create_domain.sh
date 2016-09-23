@@ -131,7 +131,7 @@ echo $green"Generando Configuración Nginx SSL"$none
 echo ""
 cat << EOF > /etc/nginx/sites-available/$MI_DOMINIO
 
-# upstream $MI_DOMINIO_docker {
+# upstream docker_$MI_DOMINIO {
 
 #     server localhost:3000;
 
@@ -158,7 +158,7 @@ server {
 
     # location / {
 
-    #     proxy_pass http://$MI_DOMINIO_docker;
+    #     proxy_pass http://docker_$MI_DOMINIO;
 
     # }
 
