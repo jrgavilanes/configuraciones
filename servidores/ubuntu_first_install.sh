@@ -1,8 +1,8 @@
 #!/bin/bash
 # ******************************************************************
-# ** Description : Script Initial Configuration for Ubuntu (16.04)
+# ** Description : Script Initial Configuration for Ubuntu (16.04.2)
 # ** File        : ubuntu_first_install.sh
-# ** Version     : 1.0
+# ** Version     : 1.1
 # ** Maintainer  : Juan R. Gavilanes
 # ** Date        : 2016-09-22
 # ******************************************************************
@@ -34,14 +34,7 @@ fi
 echo $green"Updating the repositories and installing some nice programs ..."$none
 
 sudo apt-get update
-sudo apt-get install htop ntp nginx fail2ban wget -y
-
-# Docker
-sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-# The following source.list is only for Ubuntu 16.04 
-# ( see sources for other versions at https://docs.docker.com/engine/installation/linux/ubuntulinux/ )
-echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" | sudo tee /etc/apt/sources.list.d/docker.list
-sudo apt-get update && sudo apt-get install -y docker-engine docker-compose
+sudo apt-get install htop ntp nginx fail2ban docker.io -y
 
 # Set the firewall. Open only SSH, HTTP and SSL ports services
 echo $green"Preparing the firewall ..."$none
