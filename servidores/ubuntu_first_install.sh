@@ -4,7 +4,7 @@
 # ** File        : ubuntu_first_install.sh
 # ** Version     : 1.1
 # ** Maintainer  : Juan R. Gavilanes
-# ** Date        : 2016-09-22
+# ** Date        : 2017-07-29
 # ******************************************************************
 
 
