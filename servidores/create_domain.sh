@@ -2,9 +2,9 @@
 # ******************************************************************
 # ** Description : Configure a basic web nginx site with ssl (letsEncrypt)
 # ** File        : create_domain.sh
-# ** Version     : 1.0
+# ** Version     : 1.1
 # ** Maintainer  : Juan R. Gavilanes
-# ** Date        : 2016-09-22
+# ** Date        : 2017-07-29
 # ******************************************************************
 
 
@@ -86,13 +86,39 @@ echo $green
     echo "Generando HTML básico en "/var/www/$MI_DOMINIO/index.html
     echo ""
 
-    echo "Hola desde:" $MI_DOMINIO > /var/www/$MI_DOMINIO/index.html 
+    #echo "Hola desde:" $MI_DOMINIO > /var/www/$MI_DOMINIO/index.html 
 
     echo "Generando Configuración Nginx básica"
     echo ""
 
 echo $none
 
+
+#HTML básico
+cat << EOF > /var/www/$MI_DOMINIO/index.html
+<!doctype html>
+<title>$MI_DOMINIO - Site Maintenance</title>
+<style>
+  body { text-align: center; padding: 150px; }
+  h1 { font-size: 50px; }
+  body { font: 20px Helvetica, sans-serif; color: #333; }
+  article { display: block; text-align: left; width: 650px; margin: 0 auto; }
+  a { color: #dc8100; text-decoration: none; }
+  a:hover { color: #333; text-decoration: none; }
+</style>
+
+<article>
+    <h1>We&rsquo;ll be back soon!</h1>
+    <div>
+        <p>Sorry for the inconvenience but we&rsquo;re performing some <strong>maintenance</strong> at the moment. If you need to you can always <a href="mailto:jrgavilanes@gmail.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
+        <p>&mdash; The Team</p>
+    </div>
+</article>
+EOF
+
+
+
+#Nginx configuración básico.
 cat << EOF > /etc/nginx/sites-available/$MI_DOMINIO
 server {
 
