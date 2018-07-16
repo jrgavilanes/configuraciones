@@ -207,7 +207,7 @@ server {
 
 server {
     listen 80;
-    server_name $MI_DOMINIO;
+    server_name $MI_DOMINIO www.$MI_DOMINIO;
     return 301 https://\$host\$request_uri;
 }
 EOF
