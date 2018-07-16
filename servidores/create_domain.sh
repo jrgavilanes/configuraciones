@@ -151,7 +151,7 @@ sudo service nginx restart
 
 echo $green"Requiriendo Certificado LetsEncrypt"$none
 echo ""
-sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO
+sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO -d www.$MI_DOMINIO
 
 echo $green"Generando Configuración Nginx SSL"$none
 echo ""
@@ -208,8 +208,15 @@ server {
 server {
     listen 80;
     server_name $MI_DOMINIO www.$MI_DOMINIO;
-    return 301 https://\$host\$request_uri;
+    return 301 https://$MI_DOMINIO;
 }
+
+server {
+    listen 443 ssl;
+    server_name www.$MI_DOMINIO;
+    return 301 https://$MI_DOMINIO;
+}
+
 EOF
 
 
