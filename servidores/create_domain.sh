@@ -2,7 +2,7 @@
 # ******************************************************************
 # ** Description : Configure a basic web nginx site with ssl (letsEncrypt)
 # ** File        : create_domain.sh
-# ** Version     : 1.1
+# ** Version     : 1.2
 # ** Maintainer  : Juan R. Gavilanes
 # ** Date        : 2017-07-29
 # ******************************************************************
@@ -21,19 +21,29 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-
-# Ask for the new Domain name.
-read -p $green"Introduzca su dominio (ej: jrgware.es ):? "$none MI_DOMINIO
-while [[ -z "$MI_DOMINIO" ]]; do
-    read -p $red"Necesito un dominio! (ej: jrgware.es ):? "$none MI_DOMINIO
-done
+# Is Domain given by parameter?
+if [[ -z $1 ]]; then
+    # Ask for the new Domain name.
+    read -p $green"Introduzca su dominio (ej: jrgware.es ):? "$none MI_DOMINIO
+    while [[ -z "$MI_DOMINIO" ]]; do
+        read -p $red"Necesito un dominio! (ej: jrgware.es ):? "$none MI_DOMINIO
+    done
+else
+    MI_DOMINIO=$1
+fi
 
 
 echo ""
-read -p $none"Ha introducido "$green$MI_DOMINIO$none", desea continuar?: [S/n]" sigo
-while [[ -z "$sigo" ]]; do
+if [[ -z $1 ]]; then
+    read -p $none"Ha introducido "$green$MI_DOMINIO$none", desea continuar?: [S/n]" sigo
+    while [[ -z "$sigo" ]]; do
+        sigo="S"
+    done
+else
     sigo="S"
-done
+fi
+
+
 
 if [[ ! $sigo =~ [Ss]{1} ]]; then
 
@@ -151,7 +161,7 @@ sudo service nginx restart
 
 echo $green"Requiriendo Certificado LetsEncrypt"$none
 echo ""
-sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO -d www.$MI_DOMINIO
+sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO
 
 echo $green"Generando Configuración Nginx SSL"$none
 echo ""
@@ -207,16 +217,9 @@ server {
 
 server {
     listen 80;
-    server_name $MI_DOMINIO www.$MI_DOMINIO;
-    return 301 https://$MI_DOMINIO;
+    server_name $MI_DOMINIO;
+    return 301 https://\$host\$request_uri;
 }
-
-server {
-    listen 443 ssl;
-    server_name www.$MI_DOMINIO;
-    return 301 https://$MI_DOMINIO;
-}
-
 EOF
 
 
