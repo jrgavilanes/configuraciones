@@ -2,9 +2,9 @@
 # ******************************************************************
 # ** Description : Configure a basic web nginx site with ssl (letsEncrypt)
 # ** File        : create_domain.sh
-# ** Version     : 1.2
+# ** Version     : 1.3
 # ** Maintainer  : Juan R. Gavilanes
-# ** Date        : 2017-07-29
+# ** Date        : 2019-05-12
 # ******************************************************************
 
 
@@ -96,8 +96,6 @@ echo $green
     echo "Generando HTML básico en "/var/www/$MI_DOMINIO/index.html
     echo ""
 
-    #echo "Hola desde:" $MI_DOMINIO > /var/www/$MI_DOMINIO/index.html 
-
     echo "Generando Configuración Nginx básica"
     echo ""
 
@@ -134,7 +132,7 @@ server {
 
     listen 80;     
 
-    server_name $MI_DOMINIO;
+    server_name $MI_DOMINIO www.$MI_DOMINIO;
 
     root /var/www/$MI_DOMINIO;
     index index.html index.htm;
@@ -161,7 +159,7 @@ sudo service nginx restart
 
 echo $green"Requiriendo Certificado LetsEncrypt"$none
 echo ""
-sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO
+sudo certbot-auto certonly -a webroot --webroot-path=/var/www/$MI_DOMINIO -d $MI_DOMINIO -d www.$MI_DOMINIO
 
 echo $green"Generando Configuración Nginx SSL"$none
 echo ""
@@ -177,7 +175,7 @@ server {
 
     listen 443 ssl;     
 
-    server_name $MI_DOMINIO;
+    server_name $MI_DOMINIO www.$MI_DOMINIO;
 
     ssl_certificate /etc/letsencrypt/live/$MI_DOMINIO/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/$MI_DOMINIO/privkey.pem;
@@ -217,7 +215,7 @@ server {
 
 server {
     listen 80;
-    server_name $MI_DOMINIO;
+    server_name $MI_DOMINIO www.$MI_DOMINIO;
     return 301 https://\$host\$request_uri;
 }
 EOF
