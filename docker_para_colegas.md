@@ -15,6 +15,7 @@ s sudo reboot
 ## Comandos Básicos
 ```bash
 docker run debian ping google.es
+
 docker run -it debian /bin/bash
 
 docker images
@@ -41,9 +42,10 @@ RUN apt update
 CMD ["ping", "google.es"]
 ```
 
+```
 docker build .
 docker build -t jrgavilanes/proyecto:version .
-
+```
 
 ### Imagen desde contenedor ( No recomendado)
 
