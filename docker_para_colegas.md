@@ -51,3 +51,9 @@ docker build -t jrgavilanes/proyecto:version .
 
 docker commit -c 'CMD ["ping", "google.es"]' <container_id>
 
+
+### Redireccionando puerto
+```
+docker run -p 5000:8080 <imagen_id>
+```
+
