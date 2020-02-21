@@ -57,3 +57,19 @@ docker commit -c 'CMD ["ping", "google.es"]' <container_id>
 docker run -p 5000:8080 <imagen_id>
 ```
 
+Ejemplo de guay:
+```
+# Dockerfile
+FROM debian
+RUN apt update
+RUN apt install -y python3 python3-pip
+CMD ["python3", "-m", "http.server"]
+```
+
+Rúlalo
+```
+docker -t juanra build .
+docker run -p 5000:8000 juanra
+
+curl localhost:5000
+```
