@@ -85,3 +85,88 @@ docker run -it -v $(pwd):/app alpine sh
 ```
 
 ### Apine
+
+dockerfile alpine con ssh
+```
+# Dockerfile.apihub
+
+FROM alpine
+RUN apk update 
+RUN apk add openssh
+RUN ssh-keygen -A
+
+RUN adduser --disabled-password --gecos "" juanra
+RUN echo "juanra:juanra" | chpasswd
+
+WORKDIR /app
+COPY app.sh .
+
+CMD ["sh", "app.sh"]
+```
+
+### Docker-compose
+
+docker-compose.yml
+```
+version: '3'
+
+services: 
+    apihub:
+        build: 
+            context: .
+            dockerfile: Dockerfile.apihub
+        
+    
+    app1:
+        build: 
+            context: .
+            dockerfile: Dockerfile.apihub        
+```
+
+```
+docker-compose up
+docker-compose up --build
+docker-compose down
+```
+
+
+## EJEMPLO README apihub
+
+
+#### Construye imagen
+```
+docker build -f Dockerfile.apihub -t jrgavilanes/apihub .
+```
+
+#### Construye contenedor
+```
+docker run -v $(pwd):/app --name apihub jrgavilanes/apihub
+PING google.es (216.58.201.163): 56 data bytes
+64 bytes from 216.58.201.163: seq=0 ttl=48 time=27.577 ms
+64 bytes from 216.58.201.163: seq=1 ttl=48 time=65.366 ms
+...
+```
+
+#### Arranca contenedor
+```
+docker start apihub
+apihub
+
+docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED             STATUS              PORTS               NAMES
+14b76d451e34        jrgavilanes/apihub   "ping google.es"    38 seconds ago      Up 8 seconds                            apihub
+
+docker logs apihub 
+PING google.es (216.58.201.163): 56 data bytes
+64 bytes from 216.58.201.163: seq=0 ttl=48 time=27.577 ms
+64 bytes from 216.58.201.163: seq=1 ttl=48 time=65.366 ms
+64 bytes from 216.58.201.163: seq=2 ttl=48 time=248.764 ms
+64 bytes from 216.58.201.163: seq=3 ttl=48 time=67.446 ms
+```
+
+#### Detén contenedor
+```
+docker stop apihub # En 10 segundos hace kill
+
+docker kill apihub # Recomendado stop
+```
