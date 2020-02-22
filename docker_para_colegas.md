@@ -36,6 +36,10 @@ docker exec -it <container_id> /bin/bash
 # Cuánto ocupa y borra datos
 docker system df -v
 docker system prune -a
+
+# Borrar volumes
+docker volume prune
+
 ```
 
 ## Dockerfile
