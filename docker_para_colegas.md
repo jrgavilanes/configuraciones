@@ -19,6 +19,7 @@ docker run debian ping google.es
 docker run -it debian /bin/bash
 
 docker images
+
 docker ps -a
 
 docker create debian # devuelve container_id
@@ -32,6 +33,8 @@ docker start -a <container_id>
 
 docker exec -it <container_id> /bin/bash
 
+# Cuánto ocupa y borra datos
+docker system df -v
 docker system prune -a
 ```
 
@@ -43,7 +46,7 @@ CMD ["ping", "google.es"]
 ```
 
 ```
-docker build .
+docker build -f Dockerfile .    # Si no pones -f va por defecto a Dockerfile
 docker build -t jrgavilanes/proyecto:version .
 ```
 
@@ -63,13 +66,22 @@ Ejemplo de guay:
 FROM debian
 RUN apt update
 RUN apt install -y python3 python3-pip
+WORKDIR /app
 CMD ["python3", "-m", "http.server"]
 ```
 
 Rúlalo
 ```
-docker -t juanra build .
-docker run -p 5000:8000 juanra
+docker -t imagen_juanra build .
+docker run --name contenedor_juanra -p 5000:8000 imagen_juanra
 
 curl localhost:5000
 ```
+
+### Volumenes
+
+```bash
+docker run -it -v $(pwd):/app alpine sh
+```
+
+### Apine
