@@ -1,0 +1,25 @@
+version: '3'
+
+services: 
+    nginx:
+        depends_on: 
+            - web-server
+        restart: always
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile.dev
+        ports:
+            - '8080:80'
+    web-server:
+        restart: always
+        build:
+            context: ./web-server
+            dockerfile: Dockerfile.dev
+        volumes: 
+            - ./web-server:/app
+        # ports:
+        #     - '5000:5000'
+        # environment: 
+        #     - ENTORNO=produccion
+
+        
